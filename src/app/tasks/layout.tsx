@@ -5,7 +5,12 @@ interface LayoutProps {
 }
 
 function layout({ children }: LayoutProps) {
-  return <div>{children}</div>;
+  return (
+    <div>
+      <h1 className="mb-3 text-3xl font-bold">Task</h1>
+      {children}
+    </div>
+  );
 }
 
 export default layout;
