@@ -8,7 +8,7 @@ interface TaskProps {
 
 export default function Task({ task }: TaskProps) {
   return (
-    <div className="flex flex-col rounded-md border p-3">
+    <li className="flex flex-col rounded-md border p-3">
       <div className="flex-1">
         <span
           className={`rounded-lg px-1 py-[2px] text-xs font-normal ring-1 ${task.completed ? "bg-green-200 text-green-600 ring-green-600" : "bg-red-200 text-red-500 ring-red-500"} `}
@@ -25,6 +25,6 @@ export default function Task({ task }: TaskProps) {
           More
         </Link>
       </div>
-    </div>
+    </li>
   );
 }

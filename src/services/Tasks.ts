@@ -1,7 +1,7 @@
-import axios from "./custom-axios";
+import axiosInstance from "./custom-axios";
 
 export const fetchAllTasks = () => {
-  return axios
+  return axiosInstance
     .get("/todos")
     .then((response) => response.data)
     .catch((error) => {
@@ -13,13 +13,13 @@ export const fetchAllTasks = () => {
 };
 
 export const fetchTaskById = (id: string) => {
-  return axios
+  return axiosInstance
     .get(`/todos/${id}`)
     .then(async (response) => {
-      await axios.get(`/users/${response.data.userId}`).then((user) => {
+      await axiosInstance.get(`/users/${response.data.userId}`).then((user) => {
         response.data.author = user.data.name;
       });
-      return response.data;
+      response.data;
     })
     .catch((error) => {
       if (error.response.status === 404) {

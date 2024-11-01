@@ -1,11 +1,11 @@
 "use client";
 
+import Loading from "@/components/loading";
+import Pagination from "@/components/pagination";
 import { ITask } from "@/lib/types";
 import { fetchAllTasks } from "@/services/Tasks";
-import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import Pagination from "@/components/pagination";
-import Loading from "@/components/loading";
+import { useEffect, useState } from "react";
 
 const Task = dynamic(() => import("@/components/task"));
 
@@ -65,11 +65,11 @@ function TaskList() {
         {total > limit && (
           <Pagination limit={limit} setSkip={setSkip} total={total} />
         )}
-        <div className="grid gap-3 sm:grid-cols-2">
+        <ul className="grid gap-3 sm:grid-cols-2">
           {Tasks.slice(skip, skip + limit).map((task) => (
             <Task key={task.id} task={task} />
           ))}
-        </div>
+        </ul>
       </div>
     </>
   );

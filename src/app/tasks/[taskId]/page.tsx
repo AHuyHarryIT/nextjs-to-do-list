@@ -2,7 +2,7 @@
 import Loading from "@/components/loading";
 import { ITask } from "@/lib/types";
 import { fetchTaskById } from "@/services/Tasks";
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface TaskDetail extends ITask {
   author: string;
