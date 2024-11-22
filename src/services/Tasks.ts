@@ -1,30 +1,34 @@
 import axiosInstance from "./custom-axios";
 
-export const fetchAllTasks = () => {
-  return axiosInstance
-    .get("/todos")
-    .then((response) => response.data)
-    .catch((error) => {
-      if (error.response.status === 404) {
-        throw new Error("Tasks not found");
-      }
-      throw error;
-    });
+export const fetchAllTasks = async () => {
+  try {
+    const response = await axiosInstance.get("/todos");
+    const tasks = await response.data;
+    return tasks;
+  } catch (error) {
+    throw error;
+  }
 };
 
-export const fetchTaskById = (id: string) => {
-  return axiosInstance
-    .get(`/todos/${id}`)
-    .then(async (response) => {
-      await axiosInstance.get(`/users/${response.data.userId}`).then((user) => {
-        response.data.author = user.data.name;
-      });
-      response.data;
-    })
-    .catch((error) => {
-      if (error.response.status === 404) {
-        throw new Error("This task not found");
-      }
-      throw error;
-    });
+export const fetchTaskById = async (id: string) => {
+  try {
+    const taskResponse = await axiosInstance.get(`/todos/${id}`);
+    const task = await taskResponse.data;
+    const userResponse = await axiosInstance.get(`/users/${task.userId}`);
+    const user = await userResponse.data;
+    task.author = user.name;
+    return task;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchUserTasks = async (userId: number) => {
+  try {
+    const response = await axiosInstance.get(`/users/${userId}/todos`);
+    const tasks = await response.data;
+    return tasks;
+  } catch (error) {
+    throw error;
+  }
 };

@@ -3,8 +3,9 @@
 import Loading from "@/components/loading";
 // import Pagination from "@/components/pagination";
 import { ITask } from "@/lib/types";
-import { fetchAllTasks } from "@/services/Tasks";
+import { fetchUserTasks } from "@/services/Tasks";
 import { message, Pagination } from "antd";
+import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 
@@ -19,6 +20,8 @@ function TaskList() {
   const [page, setPage] = useState<number>(1);
   const [total, setTotal] = useState(0);
 
+  const {data: session} = useSession();
+
   const getTasks = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -28,7 +31,11 @@ function TaskList() {
       content: "Fetching tasks...",
     });
     try {
-      const res = await fetchAllTasks();
+      const userId = Number(session?.user.id);
+      if (isNaN(userId)) {
+        throw new Error("Invalid user ID");
+      }
+      const res = await fetchUserTasks(userId);
       setTasks(res);
       setTotal(res.length);
       message.success({

@@ -5,12 +5,12 @@ import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
-  // session: {
-  //   strategy: "jwt",
-  // },
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
-      // name: "Credentials",
+      name: "Credentials",
       type: "credentials",
       credentials: {
         username: { label: "Username", type: "text", placeholder: "Username" },
@@ -42,6 +42,7 @@ export const authOptions: AuthOptions = {
             name: user.name,
             email: user.email,
             accessToken: "TemporaryAccessToken",
+
           };
         } catch (error) {
           console.log("Login error:", error);
@@ -52,11 +53,12 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     // This callback is used to store the user's access token in the JWT
-    async jwt({ token, user }) {
+    async jwt({ user,token }) {
       if (user) {
         token.accessToken = (
           user as unknown as { accessToken: string }
         ).accessToken;
+        token.id = user.id;
       }
       return token;
     },
@@ -64,6 +66,7 @@ export const authOptions: AuthOptions = {
     async session({ session, token }) {
       (session as unknown as { accessToken: string }).accessToken =
         token.accessToken as string;
+        session.user.id = token.id as string;
       return session;
     },
   },

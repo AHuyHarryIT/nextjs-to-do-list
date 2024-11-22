@@ -12,28 +12,24 @@ export const fetchAllUsers = () => {
     });
 };
 
-export const fetchUserById = (id: string) => {
-  return axiosInstanceWithoutToken
-    .get(`/users/${id}`)
-    .then( (response) => {
-       response.data;
-    })
-    .catch((error) => {
-      if (error.response.status === 404) {
-        throw new Error("User not found");
-      }
-      throw error;
-    });
+export const fetchUserById = async (id: string) => {
+  try {
+    const response = await axiosInstanceWithoutToken.get(`/users/${id}`);
+    const data = await response.data;
+    return data;
+  } catch (error) {
+    throw error;
+  }
 };
 
-export const fetchUserByUsername = (username:string)=>{
-    return axiosInstanceWithoutToken
-    .get(`/users?username=${username}`)
-    .then(response=> response.data)
-    .catch(error=>{
-        if(error.response.status===404){
-            throw new Error("User not found")
-        }
-        throw error
-    })
-}
+export const fetchUserByUsername = async (username: string) => {
+  try {
+    const response = await axiosInstanceWithoutToken.get(
+      `/users?username=${username}`,
+    );
+    const data = await response.data;
+    return data;
+  } catch (error) {
+    throw error;
+  }
+};

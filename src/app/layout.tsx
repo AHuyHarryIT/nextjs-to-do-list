@@ -1,9 +1,13 @@
 import Footer from "@/components/layout/Footer";
 import Header from "@/components/layout/Header";
+import { AppSidebar } from "@/components/layout/Sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import SessionProvider from "@components/SessionProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { cookies } from "next/headers";
 import "./globals.css";
+import Wrapper from "@/components/layout/Wrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -26,18 +30,29 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar:state")?.value === "true";
+
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased `}
       >
-        <SessionProvider >
-          <Header />
-          <main className="container mx-auto min-h-screen px-4 py-2">
-            {children}
-          </main>
-          <Footer/>
+        <SessionProvider>
+          <SidebarProvider defaultOpen={defaultOpen} >
+            <AppSidebar />
+            <Wrapper>
+              <div className="relative flex min-h-screen w-full flex-col bg-background">
+                <Header />
+                <div className="container mx-auto min-h-screen flex-1 px-4 py-2">
+                  {children}
+                </div>
+                <Footer />
+              </div>
+            </Wrapper>
+          </SidebarProvider>
         </SessionProvider>
+
       </body>
     </html>
   );
